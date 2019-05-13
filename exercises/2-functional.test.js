@@ -4,7 +4,6 @@
 // Tests have been written for you to test your lodash utility
 // Run these tests using the command `jest --watch exercises/2-functional.test`
 
-
 // ## Implement .reduce
 // Should take an array of values and apply the callback
 // **Bonus Point:** Do this with recursion
@@ -37,6 +36,78 @@
 // Should pick a property from an object
 // (https://lodash.com/docs/4.17.10#memoize)
 
+const _ = {
+  reduce: (array, callback, start = 0) => {
+    // standard
+    let result = start
+
+    for (let i = 0; i < array.length; i++) {
+      result = callback(result, array[i])
+    }
+
+    return result
+
+    // bonus (recursion)
+    const currentCallbackResult = callback(start, array[array.length-1]);
+
+    if (array.length == 0) {
+      return start;
+    } else if (array.length == 1) {
+      return currentCallbackResult
+    } else {
+      const slicedArray = array.slice(0, -1);
+      
+      return _.reduce(slicedArray,callback, currentCallbackResult);
+    }
+
+  },
+  map: (collection, callback) => {
+    // standard
+    let result = []
+
+    collection.forEach(item => result.push(callback(item)))
+
+    return result
+
+    //bonus (using reduce)
+    return collection.reduce((accumulator, current) => {
+      accumulator.push(callback(current));
+      return accumulator;
+    }, []);
+  },
+  defaults: (original, defaults) => (
+    {
+    ...defaults,
+    ...original,
+    }
+  ),
+  pick: (object, prop) => object[prop],
+  throttle: (fn, delay) => {
+    let lastCall = 0
+
+    return (...args) => {
+      const now = (new Date).getTime()
+      if (now - lastCall < delay) return
+      
+      lastCall = now
+      
+      return fn(...args)
+    }
+  },
+  memoize: (func) => {
+    const cache = {};
+
+    return (...args) => {
+      const key = JSON.stringify(args);
+      
+      if (!cache[key]) {
+        cache[key] = func(...args);
+      }
+
+      return cache[key];
+    };
+  },
+}
 
 // This is your lodash library. Add your own implementation for each method
 const _ = {
