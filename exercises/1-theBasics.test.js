@@ -20,10 +20,20 @@
 // This is your assert library. Add your own implementation for each method
 const assert = expectedValue => (
   {
-    toBeTruthy: undefined, 
-    toBe: undefined,
-    toEqual: undefined,
-    toThrow: undefined,
+    toBeTruthy: () => !!expectedValue,
+    toBe: value => expectedValue === value,
+    toEqual: value => JSON.stringify(expectedValue) === JSON.stringify(value),
+    toThrow: () => {
+      let didThrow = false
+
+      try {
+        expectedValue()
+      } catch(e) {
+        didThrow = true
+      }
+      
+      return didThrow
+    }
   }
 )
 
