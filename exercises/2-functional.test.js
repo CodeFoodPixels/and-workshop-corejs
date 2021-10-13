@@ -36,6 +36,8 @@
 // Should pick a property from an object
 // (https://lodash.com/docs/4.17.10#memoize)
 
+// This is your lodash library. Add your own implementation for each method
+
 const _ = {
   reduce: (array, callback, start = 0) => {
     // standard
@@ -81,7 +83,25 @@ const _ = {
     ...original,
     }
   ),
-  pick: (object, prop) => object[prop],
+  pick: (object, props) => { 
+    const result = {}
+    props.map(prop => {
+      if (object[prop])
+      result[prop] = object[prop]
+    })
+
+    return result
+
+    // // bonus (using reduce)
+    return props.reduce((accumulator, curr ) => {
+      if(object[curr]) {
+        accumulator[curr] = object[curr]
+      }
+
+      return accumulator;
+    }, {});
+
+  },
   throttle: (fn, delay) => {
     let lastCall = 0
 
@@ -109,15 +129,6 @@ const _ = {
   },
 }
 
-// This is your lodash library. Add your own implementation for each method
-const _ = {
-    reduce: undefined, 
-    map: undefined,
-    defaults: undefined,
-    pick: undefined,
-    throttle: undefined,
-    memoize: undefined
-}
 
 // These are the unit tests written to test your lodash utility. 
 // You will not need to touch these.
